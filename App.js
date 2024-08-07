@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+  ImageBackground,
+} from "react-native";
 
 export default function App() {
   const [enteredValue, SetEnteredValue] = useState("");
@@ -23,11 +32,11 @@ export default function App() {
     });
   }
   function editItem(goal) {
-    goal.text = 'EDİT';
+    goal.text = '!!EDİT'; // ?
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require('./assets/images/page.jpg')} resizeMode='cover'style={styles.container} >
       <View style={styles.goalContainer}>
         <TextInput
           style={styles.goalInput}
@@ -41,34 +50,39 @@ export default function App() {
       </View>
 
       <View style={styles.goalsContainer}>
-        {to_do_items.map((goal) => (
-          <View key={goal.id} style={styles.goalItem}>
-            <Text style={styles.goalText}>{goal.text}</Text>
-            <View style={styles.addButton}>
-              <Button title="Edit" onPress={() => editItem(goal)} />
-            </View>
-            <View style={styles.addButton}>
-              <Button title="Delete" onPress={() => deleteItem(goal.id)} />
-            </View>
-          </View>
-        ))}
+        <FlatList
+          data={to_do_items}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+                <View style={styles.addButton}>
+                  <Button title="Edit" onPress={() => editItem(itemData.item)} />
+                </View>
+                <View style={styles.addButton}>
+                  <Button title="Delete" onPress={() => deleteItem(itemData.item.id)} />
+                </View>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+          alwaysBounceVertical={false}
+        />
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "grey",
-  },
-  goalsContainer: {
-    flex: 5,
-    margin: 20,
   },
   goalInput: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#f6eaba",
+    borderRadius: 8,
   },
   goalContainer: {
     marginTop: 100,
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: "orange",
+    backgroundColor: "#48b0eb",
   },
   addButton: {
     margin: 5,
@@ -89,10 +103,17 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 10,
     borderRadius: 6,
-    backgroundColor: "orange",
+    backgroundColor: "#48b0eb",
+  },
+  goalsContainer: {
+    borderBottomColor: "black",
+    borderBottomWidth: 2,
+    flex: 5,
+    margin: 20,
   },
   goalText: {
     flex: 1,
     color: "white",
+    fontSize:18,
   },
 });
