@@ -3,40 +3,57 @@ import {
   Alert,
   Button,
   StyleSheet,
-  Text,
   TextInput,
   View,
   FlatList,
   ImageBackground,
 } from "react-native";
+import RenderItem from "./components/RenderItem";
 
 export default function App() {
   const [enteredValue, SetEnteredValue] = useState("");
-  const [to_do_items, Set_to_do_items] = useState([]);
+  const [toDoItems, SetToDoItems] = useState([]);
 
   function valueHandler(val) {
     SetEnteredValue(val);
   }
 
   function addNewItem() {
-    Set_to_do_items((to_do_item) => [
-      ...to_do_item,
-      { text: enteredValue, id: Math.random().toString() },
-    ]);
+    if (enteredValue == "") {
+      Alert.alert("Invalid Input!", "Enter goal.", [
+        { text: "Okay", style: "destructive" },
+      ]);
+    } else {
+      SetToDoItems((to_do_item) => [
+        ...to_do_item,
+        { text: enteredValue, id: Math.random().toString() },
+      ]);
+    }
+
     SetEnteredValue("");
   }
 
   function deleteItem(id) {
-    Set_to_do_items((currentItems) => {
+    SetToDoItems((currentItems) => {
       return currentItems.filter((item) => item.id !== id);
     });
   }
-  function editItem(goal) {
-    goal.text = '!!EDİT'; // ?
+
+  function editItem({ id, newText }) {
+    console.log("editItem", newText);
+    SetToDoItems((currentItems) =>
+      currentItems.map((item) =>
+        item.id === id ? { ...item, text: newText } : item
+      )
+    );
   }
 
   return (
-    <ImageBackground source={require('./assets/images/page.jpg')} resizeMode='cover'style={styles.container} >
+    <ImageBackground
+      source={require("./assets/images/page.jpg")}
+      resizeMode="cover"
+      style={styles.container}
+    >
       <View style={styles.goalContainer}>
         <TextInput
           style={styles.goalInput}
@@ -51,20 +68,14 @@ export default function App() {
 
       <View style={styles.goalsContainer}>
         <FlatList
-          data={to_do_items}
-          renderItem={(itemData) => {
-            return (
-              <View style={styles.goalItem}>
-                <Text style={styles.goalText}>{itemData.item.text}</Text>
-                <View style={styles.addButton}>
-                  <Button title="Edit" onPress={() => editItem(itemData.item)} />
-                </View>
-                <View style={styles.addButton}>
-                  <Button title="Delete" onPress={() => deleteItem(itemData.item.id)} />
-                </View>
-              </View>
-            );
-          }}
+          data={toDoItems}
+          renderItem={(itemData) => (
+            <RenderItem
+              itemData={itemData}
+              editItem={editItem}
+              deleteItem={deleteItem}
+            />
+          )}
           keyExtractor={(item, index) => {
             return item.id;
           }}
@@ -76,6 +87,11 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+  },
   container: {
     flex: 1,
   },
@@ -96,24 +112,10 @@ const styles = StyleSheet.create({
   addButton: {
     margin: 5,
   },
-  goalItem: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginHorizontal: 24,
-    margin: 20,
-    padding: 10,
-    borderRadius: 6,
-    backgroundColor: "#48b0eb",
-  },
   goalsContainer: {
     borderBottomColor: "black",
     borderBottomWidth: 2,
     flex: 5,
     margin: 20,
-  },
-  goalText: {
-    flex: 1,
-    color: "white",
-    fontSize:18,
   },
 });
