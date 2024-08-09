@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {
   Alert,
-  Button,
   StyleSheet,
   TextInput,
   View,
   FlatList,
-  ImageBackground,
+  Text,
 } from "react-native";
 import RenderItem from "./components/RenderItem";
+import { LinearGradient } from "expo-linear-gradient";
+import CustomButton from "./components/CustumButton";
 
 export default function App() {
   const [enteredValue, SetEnteredValue] = useState("");
@@ -49,21 +50,16 @@ export default function App() {
   }
 
   return (
-    <ImageBackground
-      source={require("./assets/images/page.jpg")}
-      resizeMode="cover"
-      style={styles.container}
-    >
+    <LinearGradient colors={["#c051fd", "#c686e9"]} style={styles.container}>
+      <Text style={styles.title}>TO DO LIST</Text>
       <View style={styles.goalContainer}>
         <TextInput
           style={styles.goalInput}
-          placeholder="Goal"
+          placeholder="Ad new todo item"
           onChangeText={valueHandler}
           value={enteredValue}
         />
-        <View style={styles.addButton}>
-          <Button title="ADD" onPress={addNewItem} />
-        </View>
+        <CustomButton iconName={'plus'} onpress={addNewItem} />
       </View>
 
       <View style={styles.goalsContainer}>
@@ -79,35 +75,34 @@ export default function App() {
           keyExtractor={(item, index) => {
             return item.id;
           }}
-          alwaysBounceVertical={false}
+          removeClippedSubviews={false}
         />
       </View>
-    </ImageBackground>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-  },
   container: {
     flex: 1,
   },
+  title:{
+    marginTop: 100,
+    margin: 24,
+    fontSize:30,
+    fontWeight:'bold',
+  },
   goalInput: {
+    marginRight:24,
     flex: 1,
-    backgroundColor: "#f6eaba",
+    backgroundColor: "white",
     borderRadius: 8,
+    elevation:8,
   },
   goalContainer: {
-    marginTop: 100,
     marginHorizontal: 24,
-    padding: 20,
-    borderRadius: 25,
     flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: "#48b0eb",
   },
   addButton: {
     margin: 5,
@@ -115,7 +110,7 @@ const styles = StyleSheet.create({
   goalsContainer: {
     borderBottomColor: "black",
     borderBottomWidth: 2,
-    flex: 5,
-    margin: 20,
+    flex: 1,
+    margin: 24,
   },
 });

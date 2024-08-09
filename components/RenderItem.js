@@ -1,5 +1,6 @@
 import { View, TextInput, Button, Text, Alert, StyleSheet } from "react-native";
 import React, { useState } from "react";
+import CustomButton from "./CustumButton";
 
 const RenderItem = ({ itemData, editItem, deleteItem }) => {
   const [editItemId, SetEditItemId] = useState(null);
@@ -15,7 +16,7 @@ const RenderItem = ({ itemData, editItem, deleteItem }) => {
     } else {
       edit({ id: item.id, newText: newText });
     }
-    
+
     SetEditItemId(null);
   }
 
@@ -26,22 +27,22 @@ const RenderItem = ({ itemData, editItem, deleteItem }) => {
         onChangeText={SetNewText}
         value={newText}
       />
-      <Button
-        title="Save"
-        onPress={() => editItemHandler(editItem, itemData.item)}
-      />
+      <CustomButton iconName={'check'} onpress={() => editItemHandler(editItem, itemData.item)}/>
     </View>
   ) : (
     <View style={styles.goalItem}>
       <Text style={styles.goalText}>{itemData.item.text}</Text>
       <View style={styles.addButton}>
-        <Button
-          title="Edit"
-          onPress={() => SetEditItemId(itemData.item.id)}
+        <CustomButton
+          iconName={"pencil"}
+          onpress={() => SetEditItemId(itemData.item.id)}
         />
       </View>
       <View style={styles.addButton}>
-        <Button title="Delete" onPress={() => deleteItem(itemData.item.id)} />
+        <CustomButton
+          iconName={"trash"}
+          onpress={() => deleteItem(itemData.item.id)}
+        />
       </View>
     </View>
   );
@@ -50,21 +51,24 @@ const RenderItem = ({ itemData, editItem, deleteItem }) => {
 export default RenderItem;
 
 const styles = StyleSheet.create({
-    addButton: {
-      margin: 5,
-    },
-    goalItem: {
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      marginHorizontal: 24,
-      margin: 20,
-      padding: 10,
-      borderRadius: 6,
-      backgroundColor: "#48b0eb",
-    },
-    goalText: {
-      flex: 1,
-      color: "white",
-      fontSize: 18,
-    },
-  });
+  addButton: {
+    marginHorizontal: 5,
+  },
+  goalItem: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginVertical: 10,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: "white",
+    elevation: 8,
+  },
+  goalText: {
+    flex: 1,
+    color: "black",
+    fontSize: 18,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+});
