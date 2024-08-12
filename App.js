@@ -14,6 +14,7 @@ import CustomButton from "./components/CustumButton";
 export default function App() {
   const [enteredValue, SetEnteredValue] = useState("");
   const [toDoItems, SetToDoItems] = useState([]);
+  const [isDone, SetIsDone] = useState(false);
 
   function valueHandler(val) {
     SetEnteredValue(val);
@@ -27,7 +28,7 @@ export default function App() {
     } else {
       SetToDoItems((to_do_item) => [
         ...to_do_item,
-        { text: enteredValue, id: Math.random().toString() },
+        { text: enteredValue, id: Math.random().toString(), isDone },
       ]);
     }
 
@@ -55,7 +56,7 @@ export default function App() {
       <View style={styles.goalContainer}>
         <TextInput
           style={styles.goalInput}
-          placeholder="Ad new todo item"
+          placeholder=" Ad new todo item"
           onChangeText={valueHandler}
           value={enteredValue}
         />
@@ -103,9 +104,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     flexDirection: "row",
     justifyContent: "center",
-  },
-  addButton: {
-    margin: 5,
   },
   goalsContainer: {
     borderBottomColor: "black",
