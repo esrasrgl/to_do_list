@@ -1,25 +1,12 @@
 import { View, TextInput, Button, Text, Alert, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import CustomButton from "./CustumButton";
+import CustomButton from "./CustomButton";
+import { deleteItem, editItem} from "../util/util";
 
-const RenderItem = ({ itemData, editItem, deleteItem }) => {
+const RenderItem = ({ itemData, SetToDoItems }) => {
   const [editItemId, SetEditItemId] = useState(null);
   const [newText, SetNewText] =useState(itemData.item.text);
   const [isDone, setIsDone] = useState(itemData.item.isDone);
-
-  function editItemHandler(edit, item) {
-    if (newText == "") {
-      SetNewText(item.text);
-
-      Alert.alert("Invalid Input!", "Enter goal.", [
-        { text: "Okay", style: "destructive" },
-      ]);
-    } else {
-      edit({ id: item.id, newText: newText });
-    }
-
-    SetEditItemId(null);
-  }
 
   function CheckBoxHandler() {
     return (
@@ -41,7 +28,7 @@ const RenderItem = ({ itemData, editItem, deleteItem }) => {
           />
           <CustomButton
             iconName="check"
-            onpress={() => editItemHandler(editItem, itemData.item)}
+            onpress={() => editItem(itemData.item, newText, SetToDoItems,SetEditItemId,SetNewText)}
           />
         </>
       ) : (
@@ -61,7 +48,7 @@ const RenderItem = ({ itemData, editItem, deleteItem }) => {
           />
           <CustomButton
             iconName="trash"
-            onpress={() => deleteItem(itemData.item.id)}
+            onpress={() => deleteItem(itemData.item.id, SetToDoItems)}
           />
         </>
       )}

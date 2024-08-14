@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View, Text } from "react-native";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 function CustomButton({ iconName, onpress }) {
   return (
@@ -9,6 +9,7 @@ function CustomButton({ iconName, onpress }) {
           pressed ? [styles.pressed, styles.button] : styles.button
         }
         onPress={onpress}
+        testID="pressable"
       >
         <FontAwesome5 name={iconName} size={20} color="black" />
       </Pressable>
@@ -23,8 +24,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 8,
     elevation: 8,
-    marginHorizontal:5,
-    
+    marginHorizontal: 5,
   },
   button: {
     alignItems: "center",
@@ -35,5 +35,4 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.25,
   },
-
 });
