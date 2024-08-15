@@ -1,9 +1,9 @@
 import { Alert } from "react-native";
 
 export function addNewItem(enteredValue, SetEnteredValue, SetToDoItems) {
-  if (enteredValue == "") {
+  if (enteredValue.trim() == "") {
     Alert.alert("Invalid Input!", "Enter goal.", [
-      { text: "Okay", style: "destructive" },
+      { text: "Okay", onPress: () => {}, style: "destructive" },
     ]);
     return;
   }
@@ -31,14 +31,13 @@ export function editItem(
   SetEditItemId,
   SetNewText
 ) {
-  if (newText == "") {
+  if (newText.trim() == "") {
     SetNewText(dataItem.text);
     Alert.alert("Invalid Input!", "Enter goal.", [
       { text: "Okay", style: "destructive" },
     ]);
     return;
   }
-  console.log("edit dataItem", dataItem);
   SetToDoItems((currentItems) =>
     currentItems.map((item) =>
       item.id === dataItem.id ? { ...item, text: newText } : item

@@ -28,9 +28,10 @@ export default function ToDoScreen() {
       </View>
       <View style={styles.goalsContainer}>
         <FlatList
+          testID="flatId"
           data={toDoItems}
           renderItem={(itemData) => (
-            <RenderItem itemData={itemData} SetToDoItems={SetToDoItems} />
+            <RenderItem item={itemData.item} SetToDoItems={SetToDoItems} />
           )}
           keyExtractor={(item, index) => {
             return item.id;

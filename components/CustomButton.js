@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View, Text } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 function CustomButton({ iconName, onpress }) {

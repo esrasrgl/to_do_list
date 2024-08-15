@@ -1,23 +1,45 @@
-import { render, screen } from '@testing-library/react-native';
-import React from 'react';
-import ToDoScreen from './ToDoScreen';
-import App from '../App';
+import { render, screen, fireEvent } from "@testing-library/react-native";
+import React from "react";
+import ToDoScreen from "./ToDoScreen";
+import App from "../App";
 
+test("basic test btn", () => {
+  render(<App />);
+  expect(screen.getByTestId("addText")).toBeTruthy();
+});
 
-test ('basic test btn', ()=>{
-    render(<App/>);
-    expect(screen.getByTestId("addText")).toBeTruthy();
-  })
+describe("ToDoScreen", () => {
+  let wrapper;
 
-describe('ToDoScreen', ()=>{
-    test('should render correctly', ()=>{
-        const wrapper = render(<ToDoScreen/>);
-        wrapper.getByTestId('toDoScreen');
-    });
+  beforeEach(() => {
+    wrapper = render(<ToDoScreen />);
+  });
 
-    // test('should navigate to drawer', ()=>{
-    //     throw new Error('not implemented');
-    // });
+  test("should render correctly", () => {
+    wrapper.getByTestId("toDoScreen");
+  });
 
-    
-})
+  it("should flatList render correctly", () => {
+    wrapper.getByTestId("flatId");
+    expect(wrapper).toBeTruthy();
+  });
+
+  it("should add new item toDo", () => {
+    const enterTetx = wrapper.getByTestId("addText");
+    const newText = "newText";
+    const addItem = wrapper.getByTestId("pressable");
+
+    fireEvent.changeText(enterTetx, newText);
+    expect(enterTetx.props.value).toBe(newText);
+
+    fireEvent.press(addItem);
+    let toDoData = wrapper.getByTestId("flatId").props;
+    expect(toDoData.data.length).toBe(1);
+
+    fireEvent.changeText(enterTetx, newText + 2);
+    fireEvent.press(addItem);
+
+    toDoData = wrapper.getByTestId("flatId").props;
+    expect(toDoData.data.length).toBe(2);
+  });
+});

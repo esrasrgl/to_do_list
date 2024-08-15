@@ -1,54 +1,52 @@
-import { View, TextInput, Button, Text, Alert, StyleSheet } from "react-native";
+import { View, TextInput, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import CustomButton from "./CustomButton";
-import { deleteItem, editItem} from "../util/util";
+import { deleteItem, editItem } from "../util/util";
 
-const RenderItem = ({ itemData, SetToDoItems }) => {
+const RenderItem = ({ item, SetToDoItems }) => {
   const [editItemId, SetEditItemId] = useState(null);
-  const [newText, SetNewText] =useState(itemData.item.text);
-  const [isDone, setIsDone] = useState(itemData.item.isDone);
-
-  function CheckBoxHandler() {
-    return (
-      <CustomButton
-        iconName={isDone ? "check-square" : "square"}
-        onpress={() => setIsDone((isDone) => !isDone)}
-      />
-    );
-  }
+  const [newText, SetNewText] = useState(item.text);
+  const [isDone, setIsDone] = useState(item.isDone);
 
   return (
     <View style={styles.goalItem}>
-      {editItemId === itemData.item.id ? (
+      {editItemId === item.id ? (
         <>
           <TextInput
+          testID="editTextID"
             style={styles.goalText}
             onChangeText={SetNewText}
             value={newText}
           />
           <CustomButton
             iconName="check"
-            onpress={() => editItem(itemData.item, newText, SetToDoItems,SetEditItemId,SetNewText)}
+            onpress={() =>
+              editItem(item, newText, SetToDoItems, SetEditItemId, SetNewText)
+            }
           />
         </>
       ) : (
         <>
-          <CheckBoxHandler />
+          <CustomButton
+            iconName={isDone ? "check-square" : "square"}
+            onpress={() => setIsDone((isDone) => !isDone)}
+          />
           <Text
+          testID="TextID"
             style={[
               styles.goalText,
               { textDecorationLine: isDone ? "line-through" : "none" },
             ]}
           >
-            {itemData.item.text}
+            {item.text}
           </Text>
           <CustomButton
             iconName="pencil-alt"
-            onpress={() => SetEditItemId(itemData.item.id)}
+            onpress={() => SetEditItemId(item.id)}
           />
           <CustomButton
             iconName="trash"
-            onpress={() => deleteItem(itemData.item.id, SetToDoItems)}
+            onpress={() => deleteItem(item.id, SetToDoItems)}
           />
         </>
       )}

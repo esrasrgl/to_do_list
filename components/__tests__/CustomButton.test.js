@@ -2,11 +2,12 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import CustomButton from "../CustomButton";
 import { addNewItem, deleteItem, editItem } from "../../util/util";
+import { Alert } from "react-native";
 
 describe("Custom Button", () => {
   it("shoul render correctly", () => {
     const wrapper = render(<CustomButton />);
-    wrapper.getByTestId("pressable");
+    expect(wrapper.getByTestId("pressable")).toBeTruthy();
   });
 
   it("should call onpress when clicked", () => {
@@ -39,6 +40,22 @@ describe("Custom Button", () => {
     expect(SetEnteredValue).toHaveBeenCalledWith("");
   });
 
+  it("should show alert if input is empty", () => {
+    const enteredValue = "";
+    const SetEnteredValue = jest.fn();
+    const SetToDoItems = jest.fn();
+    const alert = jest.spyOn(Alert, "alert");
+
+    addNewItem(enteredValue, SetEnteredValue, SetToDoItems);
+
+    expect(alert).toHaveBeenCalledWith(
+      "Invalid Input!",
+      "Enter goal.",
+      expect.any(Array)
+    );
+    alert.mockRestore();
+  });
+
   it("should delete item", () => {
     const id = "1";
     const SetToDoItems = jest.fn();
@@ -50,7 +67,7 @@ describe("Custom Button", () => {
 
     expect(result).toHaveLength(0);
   });
-
+  // ?
   it("delete item id is not found", () => {
     const notFoundId = "not found id";
     const SetToDoItems = jest.fn();
@@ -82,5 +99,42 @@ describe("Custom Button", () => {
       { text: "text", id: "2", isDone: false },
     ]);
     expect(SetEditItemId).toHaveBeenCalledWith(null);
+  });
+
+  it("should show alert if newText is empty", () => {
+    const dataItem = { text: "text", id: "1", isDone: false };
+    const newText = "";
+    const SetToDoItems = jest.fn();
+    const SetEditItemId = jest.fn();
+    const SetNewText = jest.fn();
+    const alert = jest.spyOn(Alert, "alert");
+
+    editItem(dataItem, newText, SetToDoItems, SetEditItemId, SetNewText);
+    expect(alert).toHaveBeenCalledWith(
+      "Invalid Input!",
+      "Enter goal.",
+      expect.any(Array)
+    );
+    alert.mockRestore();
+  });
+
+  it("should change style when pressed", async () => {
+    const mockOnPress = jest.fn();
+    const { getByTestId } = render(
+      <CustomButton iconName={"plus"} onpress={mockOnPress} />
+    );
+    const button = getByTestId("pressable");
+    expect(button).toBeTruthy();
+
+    //https://github.com/callstack/react-native-testing-library/issues/1272
+    fireEvent(button, "onResponderGrant", {
+      persist: jest.fn(),
+      nativeEvent: {
+        timestamp: Date.now(),
+      },
+    });
+    expect(button.props.style[0]).toEqual(
+      expect.objectContaining({ opacity: 0.25 })
+    );
   });
 });
